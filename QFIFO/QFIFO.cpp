@@ -3,11 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
+#include <time.h>
+
+
 
 
 struct complex_number {  //создадим структуру комплексных чисел
-    int real;
-    int imagine;
+    double real;
+
+     double imagine;
 };
 
 struct Node
@@ -37,62 +41,70 @@ int listLength(List* list);
 bool checkListExist(List* list);
 List* reverseList(List* list);
 
+
+//functions init
+
+complex_number EnterComplexNumber();
+complex_number RandomNumber();
 int main()
 {
+    srand(time(NULL));
+    
+
+
+
     List* list = NULL;
-    complex_number num;
-    num.imagine = 2;
-    num.real = 1;
-    list = createList(num);
+   
+    list = createList(RandomNumber());
 
 
 
 
-    listAddEnd(list, num);
+    listAddEnd(list, RandomNumber());
 
     printList(list);
-    printf("List end: %d\n", list->end->data);
+   
     printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
     puts("");
 
-    listAddEnd(list, num);
+    listAddEnd(list, RandomNumber());
 
     printList(list);
-    printf("List end: %d\n", list->end->data);
+  
     printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
     puts("");
 
-    list->head = listAddStart(list, num);
+    list->head = listAddStart(list, RandomNumber());
 
     printList(list);
-    printf("List end: %d\n", list->end->data);
+    
     printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
     puts("");
 
-    listAddAfter(list, num, num);
+    listAddAfter(list, RandomNumber(), RandomNumber());
 
     printList(list);
-    printf("List end: %d\n", list->end->data);
+   
     printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
     puts("");
 
     reverseList(list);
     printf("Reversed List:\n");
     printList(list);
-    printf("List end: %d\n", list->end->data);
+   
     printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
     puts("");
 
     list->head = deleteListHead(list);
     deleteListEnd(list);
-    list->head = deleteListData(list, num);
+    list->head = deleteListData(list, RandomNumber());
 
     printList(list);
-    printf("List end: %d\n", list->end->data);
+   
     printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
     puts("");
 
-    printf("Find node with data 3: %p, Find node with data -100: %p\n", findNode(list, num), findNode(list, num));
+    printf("Find node with data 3: %p, Find node with data -100: %p\n", findNode(list, RandomNumber()), findNode(list, RandomNumber()));
     puts("");
 
     list = deleteList(list);
@@ -369,7 +381,7 @@ void printList(List* list)
 
     while (printed != NULL)
     {
-        printf("Real: %d  Imagine:%d ;\n", printed->data.real,printed->data.imagine);
+        printf("Real: %lf  Imagine:%lf ;\n", printed->data.real,printed->data.imagine);
         printed = printed->next;
     }
 }
@@ -429,4 +441,26 @@ List* reverseList(List* list)
     list->end = new_tail_node;
 
     return list;
+}
+
+complex_number EnterComplexNumber()
+{   
+    complex_number buf;
+    printf("Enter real number:\n");
+    scanf("%lf", &buf.real);
+    
+    printf("Enter imagine number:\n");
+    scanf("%lf", &buf.imagine);
+
+    return buf;
+}
+
+complex_number RandomNumber()
+{
+
+    complex_number buf;
+    buf.real = rand() % 10;
+    buf.imagine = rand() % 5;
+
+    return buf;
 }
