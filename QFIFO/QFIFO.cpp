@@ -4,7 +4,7 @@
 #include <string.h>
 #include <windows.h>
 #include <time.h>
-
+#include <locale>
 
 
 
@@ -45,13 +45,20 @@ List* reverseList(List* list);
 
 complex_number EnterComplexNumber();
 complex_number RandomNumber();
-complex_number* CreateArrayRandom();
-complex_number* EnterArray();
+complex_number* CreateArrayRandom(int &count);
+complex_number* EnterArray(int& count1);
 
 int main()
-{
+{   
+
+
+
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
     srand(time(NULL));
     List* list = NULL;
+    complex_number number;
+    int count;
     int choice;
     char s;
 
@@ -66,67 +73,206 @@ int main()
         }
     } while (s != 1);//якщо ввод буде правильний scanf поверне 1 тому s=1
     
-
-    list = createList(RandomNumber());
-
-
-
-
-    listAddEnd(list, RandomNumber());
-
-    printList(list);
-   
-    printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
-    puts("");
-
-    listAddEnd(list, RandomNumber());
-
-    printList(list);
-  
-    printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
-    puts("");
-
-    list->head = listAddStart(list, RandomNumber());
-
-    printList(list);
-    
-    printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
-    puts("");
-
-    listAddAfter(list, RandomNumber(), RandomNumber());
-
-    printList(list);
-   
-    printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
-    puts("");
-
-    reverseList(list);
-    printf("Reversed List:\n");
-    printList(list);
-   
-    printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
-    puts("");
-
-    list->head = deleteListHead(list);
-    deleteListEnd(list);
-    list->head = deleteListData(list, RandomNumber());
-
-    printList(list);
-   
-    printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
-    puts("");
-
-    printf("Find node with data 3: %p, Find node with data -100: %p\n", findNode(list, RandomNumber()), findNode(list, RandomNumber()));
-    puts("");
-
-    list = deleteList(list);
-
-    printList(list);
-    if (list != NULL)
-    {
-        printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list)); // error beacause of unexisting of List
+    if (choice == 1) {
+        number = RandomNumber();
+        list=createList(number);
     }
-    return 0;
+    else if (choice == 2) {
+
+        number = EnterComplexNumber();
+        list = createList(number);
+    }
+
+    do
+    {
+
+        printf("1-Добавить в конец списка\n2-Добавитьь в начало списка\n3-Добавить после заданого елемента\n4-Перевернуть лист\n5-розмер списка\n6-Удалить голову списка\n7-Удалить заданый елемент\n8-Удалить последний елемент\n9-Удалить весь список\n10-Вывести список\n11-Ввести список как масив\n12-Срздать список после удаления\n13-Виход\n");
+        choice = 0;
+        do {
+            s = scanf("%d", &choice);
+            while (getchar() != '\n');
+            while (choice > 11 || choice < 1) {
+                printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
+                s = scanf("%d", &choice);
+                while (getchar() != '\n');
+            }
+        } while (s != 1);//якщо ввод буде правильний scanf поверне 1 тому s=1
+
+
+        switch (choice)
+        {
+        case 1: {
+            printf("1-випадково\n2-вручну\nваш вибір:");
+            int choice1;
+               do {
+                   s = scanf("%d", &choice1);
+                   while (getchar() != '\n');
+                   while (choice1 > 2 || choice1 < 1) {
+                       printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
+                       s = scanf("%d", &choice1);
+                       while (getchar() != '\n');
+                   }
+               } while (s != 1);//якщо ввод буде правильний scanf поверне 1 тому s=1
+               if (choice1 == 1) {
+                   listAddEnd(list, RandomNumber());
+                }
+               else if(choice1==2)
+               {
+                   listAddEnd(list, EnterComplexNumber());
+               }
+            break;
+        }
+        case 2: {
+            printf("1-випадково\n2-вручну\nваш вибір:");
+            int choice1;
+            do {
+                s = scanf("%d", &choice1);
+                while (getchar() != '\n');
+                while (choice1 > 2 || choice1 < 1) {
+                    printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
+                    s = scanf("%d", &choice1);
+                    while (getchar() != '\n');
+                }
+            } while (s != 1);//якщо ввод буде правильний scanf поверне 1 тому s=1
+            if (choice1 == 1) {
+                list->head = listAddStart(list, RandomNumber());
+            }
+            else if (choice1 == 2)
+            {
+                list->head = listAddStart(list, EnterComplexNumber());
+            }
+         
+
+            break;
+        }
+        case 3: {
+            printf("Введите число после которого вставлять :\n");
+            complex_number num = EnterComplexNumber();
+            printf("Как ввести число  которое  вставлять после заданого елемента :\n");
+            printf("1-випадково\n2-вручну\nваш вибір:");
+            int choice1;
+            do {
+                s = scanf("%d", &choice1);
+                while (getchar() != '\n');
+                while (choice1 > 2 || choice1 < 1) {
+                    printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
+                    s = scanf("%d", &choice1);
+                    while (getchar() != '\n');
+                }
+            } while (s != 1);//якщо ввод буде правильний scanf поверне 1 тому s=1
+            if (choice1 == 1) {
+                listAddAfter(list, RandomNumber(),num);
+            }
+            else if (choice1 == 2)
+            {
+                listAddAfter(list, EnterComplexNumber(), num);
+            }
+          
+            break;
+        }
+        case 4: {
+            reverseList(list);
+            break;
+        }
+        case 5: {
+            if (!checkListExist(list)){
+                printf("Size of list: %d, Function size of list: %d;\n", list->size, listLength(list));
+            }
+            else
+            {
+                printf("Списка не существует !!!!");
+            }
+           
+           break;
+        }
+        case 6: {
+
+            list->head = deleteListHead(list);
+           
+            break;
+        }
+        case 7: {
+            printf("Введите елмент который едалять :\n");
+            complex_number num = EnterComplexNumber();
+            list->head = deleteListData(list, num);
+
+            break;
+        }
+        case 8: {
+            deleteListEnd(list);
+            break;
+        }
+        case 9: {
+            list = deleteList(list);
+            break;
+        }
+        case 10: {
+            printList(list);
+            break;
+        }
+        case 11: {
+            printf("1-випадково\n2-вручну\nваш вибір:");
+            int choice1;
+            do {
+                s = scanf("%d", &choice1);
+                while (getchar() != '\n');
+                while (choice1 > 2 || choice1 < 1) {
+                    printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
+                    s = scanf("%d", &choice1);
+                    while (getchar() != '\n');
+                }
+            } while (s != 1);//якщо ввод буде правильний scanf поверне 1 тому s=1
+            if (choice1 == 1) {
+                complex_number* buf = CreateArrayRandom(count);
+                for (unsigned i = 0; i < count; i++)
+                {
+                    listAddEnd(list, buf[i]);
+                }
+                free(buf);
+            }
+            else if (choice1 == 2)
+            {
+                complex_number* buf = EnterArray(count);
+                for (unsigned i = 0; i < count; i++)
+                {
+                    listAddEnd(list, buf[i]);
+                }
+                free(buf);
+            }
+            
+            break;
+        }
+        case 12: {
+            int choice1;
+            printf("створення списку:\n1-випадково\n2-вручну\nваш вибір:");
+            do {
+                s = scanf("%d", &choice1);
+                while (getchar() != '\n');
+                while (choice1 > 2 || choice1 < 1) {
+                    printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
+                    s = scanf("%d", &choice1);
+                    while (getchar() != '\n');
+                }
+            } while (s != 1);//якщо ввод буде правильний scanf поверне 1 тому s=1
+
+            if (choice1 == 1) {
+                number = RandomNumber();
+                list = createList(number);
+            }
+            else if (choice1 == 2) {
+
+                number = EnterComplexNumber();
+                list = createList(number);
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    } while (choice!=13);
+
+
+   return 0;
 }
 
 List* createList(complex_number data)
@@ -390,11 +536,12 @@ void printList(List* list)
     }
 
     Node* printed = list->head;
-
+    int i = 1;
     while (printed != NULL)
-    {
-        printf("Real: %lf  Imagine:%lf ;\n", printed->data.real,printed->data.imagine);
+    {   
+        printf("#%d:Real: %lf  Imagine:%lf ;\n",i, printed->data.real,printed->data.imagine);
         printed = printed->next;
+        i++;
     }
 }
 
@@ -477,12 +624,12 @@ complex_number RandomNumber()
     return buf;
 }
 
-complex_number* CreateArrayRandom()
+complex_number* CreateArrayRandom(int& count1)
 {
     int count;
     char s;
     printf("Enter coutnt :\n");
-
+    
     do {
         s = scanf("%d", &count);
         while (getchar() != '\n');
@@ -505,10 +652,11 @@ complex_number* CreateArrayRandom()
     {
         buf[i] = RandomNumber();
     }
+    count1 = count;
     return buf;
 }
 
-complex_number* EnterArray()
+complex_number* EnterArray(int& count1)
 {
     int count;
     char s;
@@ -536,5 +684,6 @@ complex_number* EnterArray()
     {
         buf[i] = EnterComplexNumber();
     }
+    count1 = count;
     return buf;
 }
