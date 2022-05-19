@@ -10,8 +10,7 @@
 
 struct complex_number {  //создадим структуру комплексных чисел
     double real;
-
-     double imagine;
+    double imagine;
 };
 
 struct Node
@@ -46,15 +45,28 @@ List* reverseList(List* list);
 
 complex_number EnterComplexNumber();
 complex_number RandomNumber();
+complex_number* CreateArrayRandom();
+complex_number* EnterArray();
+
 int main()
 {
     srand(time(NULL));
+    List* list = NULL;
+    int choice;
+    char s;
+
+    printf("створення списку:\n1-випадково\n2-вручну\nваш вибір:");
+    do {
+        s = scanf("%d", &choice);
+        while (getchar() != '\n');
+        while (choice > 2 || choice < 1) {
+            printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
+            s = scanf("%d", &choice);
+            while (getchar() != '\n');
+        }
+    } while (s != 1);//якщо ввод буде правильний scanf поверне 1 тому s=1
     
 
-
-
-    List* list = NULL;
-   
     list = createList(RandomNumber());
 
 
@@ -462,5 +474,67 @@ complex_number RandomNumber()
     buf.real = rand() % 10;
     buf.imagine = rand() % 5;
 
+    return buf;
+}
+
+complex_number* CreateArrayRandom()
+{
+    int count;
+    char s;
+    printf("Enter coutnt :\n");
+
+    do {
+        s = scanf("%d", &count);
+        while (getchar() != '\n');
+        while (count < 0) {//якщо значення <0 просимо ввести ще раз допоки не введе корктне число
+            printf("введено символ або розмірність менше нуля.Спробуйте ще раз:");
+            s = scanf("%d", &count);
+            while (getchar() != '\n');
+        }
+    } while (s != 1);//перевірка відбувається допоки scanf не поверне 1
+   
+    complex_number* buf = nullptr;
+    buf = (complex_number*)malloc(sizeof(complex_number) * count);
+    if (!buf) {
+        printf("core dump\n");
+        return nullptr;
+
+    }
+
+    for (unsigned i = 0; i < count; i++)
+    {
+        buf[i] = RandomNumber();
+    }
+    return buf;
+}
+
+complex_number* EnterArray()
+{
+    int count;
+    char s;
+    printf("Enter coutnt :\n");
+
+    do {
+        s = scanf("%d", &count);
+        while (getchar() != '\n');
+        while (count < 0) {//якщо значення <0 просимо ввести ще раз допоки не введе корктне число
+            printf("введено символ або розмірність менше нуля.Спробуйте ще раз:");
+            s = scanf("%d", &count);
+            while (getchar() != '\n');
+        }
+    } while (s != 1);//перевірка відбувається допоки scanf не поверне 1
+
+    complex_number* buf = nullptr;
+    buf = (complex_number*)malloc(sizeof(complex_number) * count);
+    if (!buf) {
+        printf("core dump\n");
+        return nullptr;
+
+    }
+
+    for (unsigned i = 0; i < count; i++)
+    {
+        buf[i] = EnterComplexNumber();
+    }
     return buf;
 }
