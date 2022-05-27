@@ -47,6 +47,9 @@ complex_number EnterComplexNumber();
 complex_number RandomNumber();
 complex_number* CreateArrayRandom(int &count);
 complex_number* EnterArray(int& count1);
+int CountStrings(FILE* fp);
+void WriteInFile(List* list);
+
 
 int main()
 {   
@@ -56,6 +59,8 @@ int main()
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
     srand(time(NULL));
+    FILE* fp;
+ 
     List* list = NULL;
     complex_number number;
     int count;
@@ -86,12 +91,12 @@ int main()
     do
     {
 
-        printf("1-Добавить в конец списка\n2-Добавитьь в начало списка\n3-Добавить после заданого елемента\n4-Перевернуть лист\n5-розмер списка\n6-Удалить голову списка\n7-Удалить заданый елемент\n8-Удалить последний елемент\n9-Удалить весь список\n10-Вывести список\n11-Ввести список как масив\n12-Срздать список после удаления\n13-Виход\n");
+        printf("1-Добавить в конец списка\n2-Добавитьь в начало списка\n3-Добавить после заданого елемента\n4-Перевернуть лист\n5-розмер списка\n6-Удалить голову списка\n7-Удалить заданый елемент\n8-Удалить последний елемент\n9-Удалить весь список\n10-Вывести список\n11-Ввести список как масив\n12-Срздать список после удаления\n13-Записать список в файл\n14-Отсортировать список\n15-Выход\n");
         choice = 0;
         do {
             s = scanf("%d", &choice);
             while (getchar() != '\n');
-            while (choice > 11 || choice < 1) {
+            while (choice > 15 || choice < 1) {
                 printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
                 s = scanf("%d", &choice);
                 while (getchar() != '\n');
@@ -266,10 +271,18 @@ int main()
             }
             break;
         }
+        case 13: {
+            WriteInFile(list);
+            break;
+        }
+        case 14: {
+            //сортировка
+            break;
+        }
         default:
             break;
         }
-    } while (choice!=13);
+    } while (choice!=15);
 
 
    return 0;
@@ -687,3 +700,45 @@ complex_number* EnterArray(int& count1)
     count1 = count;
     return buf;
 }
+
+
+int CountStrings(FILE* fp)
+{
+    int count = 0;
+
+    while (!feof(fp))
+    {
+        fscanf(fp, "%*[^\n]\n"); // читаємо строку нікуди її не записуючи
+        count++;
+    }
+
+    rewind(fp); // повертаємо покажчик у файлі на початок
+
+    return count;
+}
+
+void WriteInFile(List* list)
+{
+    FILE* fp;
+    if (checkListExist(list) || list->size == 0)
+    {
+        return;
+    }
+
+    if ((fp = fopen("out.txt", "w")) == NULL) // відкриваємо його на запис
+    {
+        printf("Проблеми з відкриттям файла!");
+        return;
+    }
+    Node* printed = list->head;
+  ;
+    while (printed != NULL)
+    {
+        fprintf(fp,"%lf %lf\n", printed->data.real, printed->data.imagine);
+        printed = printed->next;
+      
+    }
+    fclose(fp);
+}
+
+
