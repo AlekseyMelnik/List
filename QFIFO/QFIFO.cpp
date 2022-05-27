@@ -39,8 +39,8 @@ void printList(List* list);
 int listLength(List* list);
 bool checkListExist(List* list);
 List* reverseList(List* list);
-
-
+Node* SortedInsert(Node* Head, Node* NewNode);
+Node* InsertionSort(Node* Head);
 //functions init
 
 complex_number EnterComplexNumber();
@@ -49,7 +49,7 @@ complex_number* CreateArrayRandom(int &count);
 complex_number* EnterArray(int& count1);
 int CountStrings(FILE* fp);
 void WriteInFile(List* list);
-
+List* ReadFromFile();
 
 int main()
 {   
@@ -67,11 +67,11 @@ int main()
     int choice;
     char s;
 
-    printf("створення списку:\n1-випадково\n2-вручну\nваш вибір:");
+    printf("створення списку:\n1-випадково\n2-вручну\n3-Считать из файла\nваш вибір:");
     do {
         s = scanf("%d", &choice);
         while (getchar() != '\n');
-        while (choice > 2 || choice < 1) {
+        while (choice > 3 || choice < 1) {
             printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
             s = scanf("%d", &choice);
             while (getchar() != '\n');
@@ -86,6 +86,11 @@ int main()
 
         number = EnterComplexNumber();
         list = createList(number);
+    }
+    else if (choice == 3) {
+
+     
+        list = ReadFromFile();
     }
 
     do
@@ -249,11 +254,11 @@ int main()
         }
         case 12: {
             int choice1;
-            printf("створення списку:\n1-випадково\n2-вручну\nваш вибір:");
+            printf("створення списку:\n1-випадково\n2-вручну\n3-Считать из файла\nаш вибір:");
             do {
                 s = scanf("%d", &choice1);
                 while (getchar() != '\n');
-                while (choice1 > 2 || choice1 < 1) {
+                while (choice1 > 3 || choice1 < 1) {
                     printf("введено символ або неіснуючий режим.Спробуйте ще раз:");
                     s = scanf("%d", &choice1);
                     while (getchar() != '\n');
@@ -269,6 +274,11 @@ int main()
                 number = EnterComplexNumber();
                 list = createList(number);
             }
+            else if (choice == 3) {
+
+
+                list = ReadFromFile();
+            }
             break;
         }
         case 13: {
@@ -276,7 +286,7 @@ int main()
             break;
         }
         case 14: {
-            //сортировка
+            list->head=InsertionSort(list->head);
             break;
         }
         default:
@@ -614,7 +624,48 @@ List* reverseList(List* list)
 
     return list;
 }
+Node *InsertionSort(Node *Head)
+{
+    if (!Head || !Head->next)
+        return Head;
 
+    Node *ptr = Head->next;
+    Node *result = Head;
+    result->next = NULL;
+
+    while (ptr)
+    {
+        Node *temp = ptr;
+        ptr = ptr->next;
+        result = SortedInsert(result, temp);
+    }
+
+    return result;
+}
+
+Node* SortedInsert(Node *Head, Node* NewNode)
+{
+    if (Head == NULL || Head->data.real >= NewNode->data.real)
+    {
+        NewNode->next = Head;
+        Head = NewNode;
+        return Head;
+    }
+
+    Node* ptr = Head;
+    Node* prev = NULL;
+
+    while (ptr != NULL && ptr->data.real < NewNode->data.real)
+    {
+        prev = ptr;
+        ptr = ptr->next;
+    }
+
+    NewNode->next = ptr;
+    prev->next = NewNode;
+
+    return Head;
+}
 complex_number EnterComplexNumber()
 {   
     complex_number buf;
@@ -719,7 +770,7 @@ int CountStrings(FILE* fp)
 
 void WriteInFile(List* list)
 {
-    FILE* fp;
+    FILE* fp=NULL;
     if (checkListExist(list) || list->size == 0)
     {
         return;
@@ -739,6 +790,33 @@ void WriteInFile(List* list)
       
     }
     fclose(fp);
+}
+
+List* ReadFromFile()
+{
+    FILE* fp=NULL;
+    List* list = NULL;
+    if ((fp = fopen("out.txt", "r")) == NULL) // відкриваємо файл на читання
+    {
+        printf("Проблеми з відкриттям файла!");
+        return NULL;
+    }
+    int count = CountStrings(fp);
+    for (int i = 0; i < count; i++)
+    {
+        complex_number complex;
+        fscanf(fp, "\n%lf %lf", &complex.real, &complex.imagine);
+        if (i == 0) {
+            list = createList(complex);
+        }
+        else
+        {
+            listAddEnd(list, complex);
+        }
+    }
+    fclose(fp);
+
+    return list;
 }
 
 
